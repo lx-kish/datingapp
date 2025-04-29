@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250419085408_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250429093300_UserEntityUpdate")]
+    partial class UserEntityUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,14 @@ namespace API.Data.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
 
                     b.HasKey("Id");
 

@@ -422,3 +422,4 @@ FodyWeavers.xsd
 # @lx-kish - commit messages
 *commit messages*.txt
 ssl/
+*.db

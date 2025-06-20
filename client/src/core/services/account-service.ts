@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ILoginCreds, IRegisterCreds, IUser } from '../../types/user';
 import { tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class AccountService {
   private http = inject(HttpClient);
   currentUser = signal<IUser | null>(null);
 
-  baseUrl = 'https://localhost:5001/api/';
+  private baseUrl = environment.apiUrl;
 
   setCurrentUser(user: IUser) {
     localStorage.setItem('user', JSON.stringify(user));

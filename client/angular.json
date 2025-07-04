@@ -17,6 +17,9 @@
         },
         "@schematics/angular:interceptor": {
           "path": "src/core/interceptors"
+        },
+        "@schematics/angular:resolver": {
+          "path": "src"
         }
       },
       "root": "",

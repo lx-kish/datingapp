@@ -17,3 +17,10 @@ export interface IPhoto {
   publicId?: string
   memberId: string
 }
+
+export interface IEditableMember {
+  displayName: string
+  description?: string
+  city: string
+  country: string
+}

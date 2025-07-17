@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { IMember, IPhoto } from '../../types/member';
+import { IEditableMember, IMember, IPhoto } from '../../types/member';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +21,9 @@ export class MemberService {
 
   getMemberPhotos(id: string) {
     return this.http.get<IPhoto[]>(`${this.baseUrl}members/${id}/photos`);
+  }
+
+  updateMember(member: IEditableMember) {
+    return this.http.put(`${this.baseUrl}members`, member);
   }
 }

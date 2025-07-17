@@ -22,7 +22,9 @@ import { ToastService } from '../../../core/services/toast-service';
 })
 export class MemberProfile implements OnInit, OnDestroy {
   @ViewChild('editForm') editForm?: NgForm;
-  @HostListener('window:beforeunload', ['$event']) notify($event:BeforeUnloadEvent) {
+  @HostListener('window:beforeunload', ['$event']) notify(
+    $event: BeforeUnloadEvent
+  ) {
     if (this.editForm?.dirty) {
       $event.preventDefault();
     }
@@ -61,8 +63,12 @@ export class MemberProfile implements OnInit, OnDestroy {
     if (!this.member()) return;
 
     const updatedMember = { ...this.member(), ...this.editableMember };
-    console.log(updatedMember);
-    this.toast.success('Profile updated successfully');
-    this.memberService.editMode.set(false);
+    this.memberService.updateMember(this.editableMember).subscribe({
+      next: () => {
+        this.toast.success('Profile updated successfully');
+        this.memberService.editMode.set(false);
+        this.editForm?.reset(updatedMember);
+      },
+    });
   }
 }

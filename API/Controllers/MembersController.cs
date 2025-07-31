@@ -56,7 +56,7 @@ public class MembersController(IMemberRepository memberRepository, IPhotoService
     }
 
     [HttpPost("add-photo")]
-    public async Task<ActionResult<Photo>> AddPhoto([FromForm]IFormFile file)
+    public async Task<ActionResult<Photo>> AddPhoto([FromForm] IFormFile file)
     {
         var member = await memberRepository.GetMemberForUpdate(User.GetMemberId());
 
@@ -84,5 +84,27 @@ public class MembersController(IMemberRepository memberRepository, IPhotoService
         if (await memberRepository.SaveAllAsync()) return photo;
 
         return BadRequest("Problem add the photo");
+    }
+
+    [HttpPut("set-main-photo/{photoId}")]
+    public async Task<ActionResult> SetMainPhoto(int photoId)
+    {
+        var member = await memberRepository.GetMemberForUpdate(User.GetMemberId());
+
+        if (member == null) return BadRequest("Cannot get member from token");
+
+        var photo = member.Photos.SingleOrDefault(x => x.Id == photoId);
+
+        if (member.ImageUrl == photo?.Url || photo == null)
+        {
+            return BadRequest("Cannot set the photo with ID " + photoId + " as a main image");
+        }
+
+        member.ImageUrl = photo.Url;
+        member.User.ImageUrl = photo.Url;
+
+        if (await memberRepository.SaveAllAsync()) return NoContent();
+
+        return BadRequest("Unexpected problem setting main photo");
     }
 }

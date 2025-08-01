@@ -39,4 +39,8 @@ export class MemberService {
 
     return this.http.post<IPhoto>(`${this.baseUrl}members/add-photo`, formData);
   }
+
+  setMainPhoto(photo: IPhoto) {
+    return this.http.put(`${this.baseUrl}members/set-main-photo/${photo.id}`, {});
+  }
 }

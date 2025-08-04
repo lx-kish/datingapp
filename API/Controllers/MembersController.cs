@@ -107,4 +107,31 @@ public class MembersController(IMemberRepository memberRepository, IPhotoService
 
         return BadRequest("Unexpected problem setting main photo");
     }
+
+    [HttpDelete("delete-photo/{photoId}")]
+    public async Task<ActionResult> DeletePhoto(int photoId)
+    {
+        var member = await memberRepository.GetMemberForUpdate(User.GetMemberId());
+
+        if (member == null) return BadRequest("Cannot get member from token");
+
+        var photo = member.Photos.SingleOrDefault(x => x.Id == photoId);
+
+        if (photo == null || photo.Url == member.ImageUrl)
+        {
+            return BadRequest("Cannot delete the photo with ID " + photoId);
+        }
+
+        if (photo.PublicId != null)
+        {
+            var result = await photoService.DeletePhotoAsync(photo.PublicId);
+            if (result.Error != null) return BadRequest(result.Error.Message);
+        }
+
+        member.Photos.Remove(photo);
+
+        if (await memberRepository.SaveAllAsync()) return Ok();
+
+        return BadRequest("Unexpected problem deleteng the photo " + photoId);
+    }
 }
